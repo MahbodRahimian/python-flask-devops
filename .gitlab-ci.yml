@@ -14,9 +14,9 @@ build-image:
   stage: build
   tags:
     - docker
-  image: registry.local:5000/docker:24
+  image: registry.local:5000/docker:29
   services:
-    - name: registry.local:5000/docker:24-dind
+    - name: registry.local:5000/docker:29-dind
       alias: docker
   variables:
     DOCKER_TLS_CERTDIR: ""
@@ -34,7 +34,7 @@ deploy-docker:
   stage: deploy-docker
   tags:
     - docker
-  image: registry.local:5000/docker:24
+  image: registry.local:5000/docker:29
   variables:
     DOCKER_TLS_CERTDIR: ""
     IMAGE_TAG: "$CI_PIPELINE_ID"
