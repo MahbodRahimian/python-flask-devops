@@ -1,0 +1,86 @@
+variables:
+  IMAGE_TAG: "$CI_PIPELINE_ID"
+  REGISTRY: "registry.local:5000"
+  IMAGE_NAME: "$REGISTRY/myapp"
+
+stages:
+  - build
+  - deploy-docker
+  - deploy-k8s
+
+
+
+build-image:
+  stage: build
+  tags:
+    - docker
+  image: registry.local:5000/docker:24
+  services:
+    - name: registry.local:5000/docker:24-dind
+      alias: docker
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - docker info
+    - docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+    - docker push ${IMAGE_NAME}:${IMAGE_TAG}
+  only:
+    - main
+  when: manual
+
+
+
+deploy-docker:
+  stage: deploy-docker
+  tags:
+    - docker
+  image: registry.local:5000/docker:24
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    IMAGE_TAG: "$CI_PIPELINE_ID"
+  script:
+    - docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+    - docker compose up -d --force-recreate
+
+    - docker exec my-app sh -c "
+        curl -sf http://localhost:8000/metrics > /app/metrics.json
+        || echo '{\"uptime_seconds\":0,\"requests\":0}' > /app/metrics.json
+      "
+
+    - docker exec my-app python3 /app/ci_generate_html.py
+
+    - docker cp my-app:/app/metrics.json .
+    - docker cp my-app:/app/app_status.html .
+  artifacts:
+    paths:
+      - metrics.json
+      - app_status.html
+    expire_in: 1 day
+  only:
+    - main
+  when: manual
+
+
+deploy-k8s:
+  stage: deploy-k8s
+  tags:
+    - docker
+  image:
+    name: registry.local:5000/bitnami-kubectl:latest
+    entrypoint: [""]
+
+  before_script:
+    - echo "$KUBECONFIG_DATA" | base64 -d > kubeconfig
+    - export KUBECONFIG=$CI_PROJECT_DIR/kubeconfig
+
+  script:
+    # Inject IMAGE_TAG into deployment
+    - sed "s|\${IMAGE_TAG}|$IMAGE_TAG|g" k8s/deployment.yaml | kubectl apply -f -
+
+    - kubectl apply -f k8s/service.yaml
+    - kubectl apply -f k8s/ingress.yaml
+
+    - kubectl rollout status deployment/my-app -n traefik
+  only:
+    - main
+  when: manual

@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  my-app:
+    image: registry.local:5000/myapp:${IMAGE_TAG}
+    container_name: my-app
+    ports:
+      - "8000:8000"
+    restart: always
