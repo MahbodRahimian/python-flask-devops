@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM registry.local:5000/python:3.12-slim
 
 WORKDIR /app
 
