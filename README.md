@@ -225,3 +225,16 @@ This project focuses on practical DevOps skills, including:
 - Kubernetes resource management.
 - Offline dependency management.
 - Deployment configuration and troubleshooting.
+
+
+
+
+
+
+## Documentation
+
+| Document | Description |
+|---|---|
+| [Architecture](docs/architecture.md) | Application and infrastructure architecture |
+| [Deployment Guide](docs/deployment.md) | Docker and Kubernetes deployment instructions |
+| [CI/CD Strategy](docs/ci-cd.md) | Proposed CI/CD workflow and future improvements |
