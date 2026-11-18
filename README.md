@@ -242,14 +242,6 @@ This project focuses on practical DevOps skills, including:
 | [CI/CD Strategy](docs/ci-cd.md) | Proposed CI/CD workflow and future improvements |
 
 
-Detailed project documentation:
-
-| Document | Description |
-|---|---|
-| [Architecture](docs/architecture.md) | Application and infrastructure architecture |
-| [Deployment Guide](docs/deployment.md) | Docker and Kubernetes deployment |
-| [CI/CD Strategy](docs/ci-cd.md) | Proposed CI/CD workflow |
-
 ## Project Highlights
 
 - Containerized Python Flask application.
