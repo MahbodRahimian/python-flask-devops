@@ -1,5 +1,11 @@
 # Python Flask DevOps Project
 
+![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Framework-black?logo=flask)
+![Docker](https://img.shields.io/badge/Docker-Containerization-blue?logo=docker)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Orchestration-326CE5?logo=kubernetes&logoColor=white)
+![License](https://img.shields.io/badge/License-Not%20Specified-lightgrey)
+
 A containerized Python Flask application demonstrating application packaging, Docker-based deployment, Kubernetes orchestration, and offline Python dependency installation.
 
 ## Overview
