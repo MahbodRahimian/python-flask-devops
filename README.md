@@ -1,93 +1,227 @@
-# mahbod1
+# Python Flask DevOps Project
 
+A containerized Python Flask application demonstrating application packaging, Docker-based deployment, Kubernetes orchestration, and offline Python dependency installation.
 
+## Overview
 
-## Getting started
+This project demonstrates how to package and deploy a Python Flask application using modern containerization and orchestration tools.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The application can be built and executed using Docker, managed through Docker Compose, and deployed to a Kubernetes cluster.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+An additional focus of this project is **offline dependency management**. Python packages are stored locally in the `packages/` directory, allowing dependencies to be installed without downloading them from the internet.
 
-## Add your files
+## Architecture
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+The following diagram illustrates the high-level application architecture:
 
+```mermaid
+flowchart TD
+    User[Client / Browser]
+    App[Flask Application]
+    Runtime[Python Runtime]
+    Dependencies[Python Dependencies]
+
+    User --> App
+    App --> Runtime
+    Runtime --> Dependencies
 ```
-cd existing_repo
-git remote add origin http://gitlab.mahbod.com:8080/root/mahbod1.git
-git branch -M main
-git push -uf origin main
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python 3.12 | Application runtime |
+| Flask | Web application framework |
+| Docker | Application containerization |
+| Docker Compose | Container lifecycle management |
+| Kubernetes | Container orchestration |
+| Kubernetes Deployment | Application workload management |
+| Kubernetes Service | Internal application networking |
+| Kubernetes Ingress | External HTTP routing |
+| pip | Python dependency management |
+
+## Key Features
+
+- Python Flask web application.
+- Docker image build and container execution.
+- Docker Compose configuration.
+- Kubernetes Deployment, Service, and Ingress manifests.
+- Offline Python dependency installation using locally stored wheel packages.
+- Separation of application code and deployment configuration.
+
+## Project Structure
+
+```text
+.
+├── app/
+│   └── main.py
+├── packages/
+│   └── Python wheel packages
+├── k8s/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── ingress.yaml
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── ci_generate_html.py
+└── README.md
 ```
 
-## Integrate with your tools
+## Offline Dependency Installation
 
-- [ ] [Set up project integrations](http://gitlab.mahbod.com:8080/root/mahbod1/-/settings/integrations)
+This project includes locally stored Python packages in the `packages/` directory.
 
-## Collaborate with your team
+Install dependencies using the local package repository:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```bash
+pip install --no-index --find-links=packages -r requirements.txt
+```
 
-## Test and Deploy
+This approach is useful in restricted environments where direct access to public package repositories is unavailable.
 
-Use the built-in continuous integration in GitLab.
+## Docker Deployment
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Build the Docker image:
 
-***
+```bash
+docker build -t python-flask-devops .
+```
 
-# Editing this README
+Run the container:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```bash
+docker run -d --name flask-app python-flask-devops
+```
 
-## Suggestions for a good README
+The container port and host port mapping should follow the port configuration defined in the Dockerfile and application.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Docker Compose
 
-## Name
-Choose a self-explaining name for your project.
+Build and start the application using Docker Compose:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+docker compose up -d --build
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Check running containers:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```bash
+docker compose ps
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Stop the application:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```bash
+docker compose down
+```
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Kubernetes Deployment
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The Kubernetes manifests are available in the `k8s/` directory.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Apply the manifests:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```bash
+kubectl apply -f k8s/
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Check the deployed resources:
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```bash
+kubectl get deployments
+kubectl get pods
+kubectl get services
+kubectl get ingress
+```
 
-## License
-For open source projects, say how it is licensed.
+Check application logs:
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```bash
+kubectl logs <pod-name>
+```
+
+The Ingress resource requires a compatible Ingress Controller to be installed and configured in the Kubernetes cluster.
+
+## Deployment Workflow
+
+```mermaid
+flowchart TD
+    Source[Python Application Source]
+    Dockerfile[Dockerfile]
+    Image[Docker Image]
+    Compose[Docker Compose]
+    K8s[Kubernetes Manifests]
+    Deployment[Kubernetes Deployment]
+    Pod[Application Pod]
+    Service[Kubernetes Service]
+    Ingress[Kubernetes Ingress]
+    User[External Client]
+
+    Source --> Dockerfile
+    Dockerfile --> Image
+    Image --> Compose
+    Image --> Deployment
+    Deployment --> Pod
+    User --> Ingress
+    Ingress --> Service
+    Service --> Pod
+```
+
+## Configuration
+
+Application and deployment settings are maintained in the corresponding project files:
+
+- `requirements.txt`: Python dependencies.
+- `Dockerfile`: Container image build instructions.
+- `docker-compose.yml`: Local container orchestration.
+- `k8s/deployment.yaml`: Kubernetes workload configuration.
+- `k8s/service.yaml`: Kubernetes networking configuration.
+- `k8s/ingress.yaml`: External HTTP routing configuration.
+
+## Troubleshooting
+
+**Check Docker containers:**
+
+```bash
+docker ps -a
+```
+
+**Inspect container logs:**
+
+```bash
+docker logs flask-app
+```
+
+**Check Kubernetes resources:**
+
+```bash
+kubectl get all
+```
+
+**Inspect a Kubernetes Pod:**
+
+```bash
+kubectl describe pod <pod-name>
+```
+
+## Future Improvements
+
+Potential improvements for this project include:
+
+- CI/CD pipeline integration.
+- Container image vulnerability scanning.
+- Kubernetes resource limits and health probes.
+- Application monitoring and centralized logging.
+- Helm-based Kubernetes deployment.
+- Automated deployment validation.
+
+## Project Focus
+
+This project focuses on practical DevOps skills, including:
+
+- Application containerization.
+- Docker-based deployment.
+- Kubernetes resource management.
+- Offline dependency management.
+- Deployment configuration and troubleshooting.
