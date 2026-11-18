@@ -233,10 +233,6 @@ This project focuses on practical DevOps skills, including:
 - Deployment configuration and troubleshooting.
 
 
-
-
-
-
 ## Documentation
 
 | Document | Description |
@@ -244,3 +240,26 @@ This project focuses on practical DevOps skills, including:
 | [Architecture](docs/architecture.md) | Application and infrastructure architecture |
 | [Deployment Guide](docs/deployment.md) | Docker and Kubernetes deployment instructions |
 | [CI/CD Strategy](docs/ci-cd.md) | Proposed CI/CD workflow and future improvements |
+
+
+Detailed project documentation:
+
+| Document | Description |
+|---|---|
+| [Architecture](docs/architecture.md) | Application and infrastructure architecture |
+| [Deployment Guide](docs/deployment.md) | Docker and Kubernetes deployment |
+| [CI/CD Strategy](docs/ci-cd.md) | Proposed CI/CD workflow |
+
+## Project Highlights
+
+- Containerized Python Flask application.
+- Docker and Docker Compose deployment.
+- Kubernetes workload orchestration.
+- Offline Python dependency installation.
+- Infrastructure and deployment documentation.
+
+## Author
+
+**Mahbod Rahimian**
+
+DevOps Engineer | Infrastructure Automation | Containerization | Kubernetes
